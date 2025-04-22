@@ -1,3 +1,11 @@
+<?php
+include "../config/db.php";
+
+$sql = "SELECT * FROM student";
+$result = mysqli_query($conn, $sql);
+
+?>
+
 <!doctype html>
 <html lang="en">
 <!--begin::Head-->
@@ -63,177 +71,150 @@
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
         <!--begin::Header-->
-        <?php include "../includes/Navbar.php" ?>;
+        <?php include "../includes/Navbar.php" ?>
         <!--end::Header-->
         <!-- begin::Sidebar -->
-        <?php include "../includes/Sidebar.php" ?>;
+        <?php include "../includes/Sidebar.php" ?>
         <!-- end::Sidebar -->
-        <!--begin::App Main-->
-        <main class="app-main">
-            <!--begin::App Content Header-->
-            <div class="app-content-header">
-                <!--begin::Container-->
-                <div class="container-fluid">
-                    <!--begin::Row-->
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <h3 class="mb-0">Dashboard</h3>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-end">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                            </ol>
+        <div class="container-fluid">
+            <div class="d-flex justify-content-start align-items-center mb-3 mt-2">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    New
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary">
+                                <h1 class="modal-title fs-5 text-white fw-bold" id="exampleModalLabel">New Student</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                    <label for="floatingInput">Firstname</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                    <label for="floatingInput">Middlename</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                    <label for="floatingInput">Lastname</label>
+                                </div>
+                                <div class="form-floating mb-3">
+
+                                    <script>
+                                        let department = [{
+                                                value: "COED",
+                                                courses: ["BEED", "BSED", "BECED", "BPED"]
+                                            },
+                                            {
+                                                value: "CBA",
+                                                courses: ["BSIT", "BSBA FM", "BSA", "BSMA"]
+
+                                            },
+                                            {
+                                                value: "CAS",
+                                                courses: ["AB PHILO", "BS PSYCHOLOGY", "BSA"]
+                                            },
+                                            {
+                                                value: "CCJ",
+                                                courses: ["BSCRIM"]
+                                            }
+
+                                        ];
+                                    </script>
+
+
+                                    <select class="form-select" aria-label="Department">
+                                        <option selected disabled>Department</option>
+                                        <option value="COED">COED</option>
+                                        <option value="CBA">CBA</option>
+                                        <option value="CAS">CAS</option>
+                                        <option value="CCJ">CCJ</option>
+                                    </select>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" aria-label="Department">
+                                        <option selected disabled>Course</option>
+                                        <option value="CBA">CBA</option>
+                                        <option value="COED">COED</option>
+                                        <option value="CAS">CAS</option>
+                                        <option value="CCJ">CCJ</option>
+                                    </select>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="e.g. 1A">
+                                    <label for="floatingInput">Year/Section</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                    <label for="floatingInput">Username</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                                    <label for="floatingPassword">Password</label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save</button>
+                            </div>
                         </div>
                     </div>
-                    <!--end::Row-->
                 </div>
-                <!--end::Container-->
             </div>
-            <!--end::App Content Header-->
-            <!--begin::App Content-->
-            <div class="app-content">
-                <!--begin::Container-->
-                <div class="container-fluid">
-                    <!--begin::Row-->
-                    <div class="row">
-                        <!--begin::Col-->
-                        <div class="col-lg-4 col-6">
-                            <!--begin::Small Box Widget 1-->
-                            <div class="small-box text-bg-primary">
-                                <div class="inner">
-                                    <h3>150</h3>
-                                    <p>No. of Registered Students</p>
-                                </div>
-                                <svg
-                                    class="small-box-icon"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    aria-hidden="true">
-                                    <path
-                                        d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"></path>
-                                </svg>
-                                <a
-                                    href="#"
-                                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                                    More info <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                            <!--end::Small Box Widget 1-->
-                        </div>
-                        <!--end::Col-->
-                        <div class="col-lg-4 col-6">
-                            <!--begin::Small Box Widget 2-->
-                            <div class="small-box text-bg-success">
-                                <div class="inner">
-                                    <h3>53<sup class="fs-5">%</sup></h3>
-                                    <p>No. of Enrolled Students</p>
-                                </div>
-                                <svg
-                                    class="small-box-icon"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    aria-hidden="true">
-                                    <path
-                                        d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z"></path>
-                                </svg>
-                                <a
-                                    href="#"
-                                    class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                                    More info <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                            <!--end::Small Box Widget 2-->
-                        </div>
-                        <!--end::Col-->
-                        <div class="col-lg-4 col-6">
-                            <!--begin::Small Box Widget 3-->
-                            <div class="small-box text-bg-warning">
-                                <div class="inner">
-                                    <h3>44</h3>
-                                    <p>No. of Attendance</p>
-                                </div>
-                                <svg
-                                    class="small-box-icon"
-                                    fill="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    aria-hidden="true">
-                                    <path
-                                        d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"></path>
-                                </svg>
-                                <a
-                                    href="#"
-                                    class="small-box-footer link-dark link-underline-opacity-0 link-underline-opacity-50-hover">
-                                    More info <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                            <!--end::Small Box Widget 3-->
-                        </div>
-                        <!--end::Col-->
-                    </div>
-                    <!--end::Row-->
-                    <!--begin::Row-->
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <h3 class="card-title">Calendar of Events</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div id="calendar"></div>
-                                </div>
-                            </div>
-                        </div>
+            <table class="table table-hover table-striped-columns">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">FIRSTNAME</th>
+                        <th scope="col">MIDDLENAME</th>
+                        <th scope="col">LASTNAME</th>
+                        <th scope="col">DEPARTMENT</th>
+                        <th scope="col">COURSE</th>
+                        <th scope="col">YEAR & SECTION</th>
+                        <th scope="col">USERNAME</th>
+                        <th scope="col">PASSWORD</th>
+                        <th scope="col">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                        <div class="col-lg-4 col-6">
-                            <!-- Today's Event -->
-                            <div class="small-box text-bg-primary mb-3">
-                                <div class="inner">
-                                    <h3>150</h3>
-                                    <p>Today's Event</p>
-                                </div>
-                                <svg class="small-box-icon" fill="currentColor" viewBox="0 0 24 24" ...></svg>
-                                <a href="#" class="small-box-footer link-light">
-                                    More info <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
+                    <?php
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<th scope='row'>" . $row["STUDENTID"] . "</th>";
+                            echo "<td>" . $row["FIRSTNAME"] . "</td>";
+                            echo "<td>" . $row["MIDDLENAME"] . "</td>";
+                            echo "<td>" . $row["LASTNAME"] . "</td>";
+                            echo "<td>" . $row["DEPARTMENT"] . "</td>";
+                            echo "<td>" . $row["COURSE"] . "</td>";
+                            echo "<td>" . $row["YEARSECTION"] . "</td>";
+                            echo "<td>" . $row["USERNAME"] . "</td>";
+                            echo "<td>" . $row["PASSWORD"] . "</td>";
+                            echo '<td>
+                            <button type="button" class="btn btn-info">Edit</button>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                            </td>';
 
-                            <!-- Upcoming Event -->
-                            <div class="small-box text-bg-success mb-3">
-                                <div class="inner">
-                                    <h3>3</h3>
-                                    <p>Upcoming Events</p>
-                                </div>
-                                <i class="bi bi-calendar-event small-box-icon"></i>
-                                <a href="#" class="small-box-footer link-light">
-                                    View all <i class="bi bi-link-45deg"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "No data found";
+                    }
 
-                    <!--end::Container-->
-                </div>
-                <!--end::App Content-->
-        </main>
-        <!--end::App Main-->
-        <!--begin::Footer-->
-        <footer class="app-footer">
-            <!--begin::To the end-->
-            <div class="float-end d-none d-sm-inline">Anything you want</div>
-            <!--end::To the end-->
-            <!--begin::Copyright-->
-            <strong>
-                Copyright &copy; 2014-2024&nbsp;
-                <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
-            </strong>
-            All rights reserved.
-            <!--end::Copyright-->
-        </footer>
-        <!--end::Footer-->
+                    ?>
+
+                </tbody>
+            </table>
+        </div>
+
+
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->
