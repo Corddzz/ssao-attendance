@@ -1,9 +1,18 @@
-<!DOCTYPE html>
+<?php
+include "../config/db.php";
+
+$sql = "SELECT * FROM sanctions LIMIT 10";
+$result = mysqli_query($conn, $sql);
+
+?>
+
+<!doctype html>
 <html lang="en">
+<!--begin::Head-->
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>SSAO | Dashboard</title>
+    <title>SSAO | Students</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="title" content="AdminLTE v4 | Dashboard" />
@@ -51,96 +60,219 @@
         href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"
         integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
         crossorigin="anonymous" />
-    <link rel="stylesheet" href="./assets/css/calendar.css" />
+    <link rel="stylesheet" href="../assets/css/calendar.css" />
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
 </head>
+<!--end::Head-->
+<!--begin::Body-->
 
-<body>
-    <!--begin::Sidebar-->
-    <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
-        <!--begin::Sidebar Brand-->
-        <div class="sidebar-brand">
-            <!--begin::Brand Link-->
-            <a href="#" class="brand-link">
-                <!--begin::Brand Image-->
-                <!-- <img
-                    src=""
-                    alt="Image"
-                    class="brand-image opacity-75 shadow" /> -->
-                <!--end::Brand Image-->
-                <!--begin::Brand Text-->
-    <span class="brand-text fw-light">Admin</span>
-       <!--end::Brand Text-->
-            </a>
-            <!--end::Brand Link-->
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <!--begin::App Wrapper-->
+    <div class="app-wrapper">
+        <!--begin::Header-->
+        <?php include "../includes/Navbar.php" ?>
+        <!--end::Header-->
+        <!-- begin::Sidebar -->
+        <?php include "../includes/Sidebar.php" ?>
+        <!-- end::Sidebar -->
+        <div class="container-fluid">
+            <div class="d-flex justify-content-start align-items-center mb-3 mt-2">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Add New Sanction
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary">
+                                <h1 class="modal-title fs-5 text-white fw-bold" id="exampleModalLabel">Add Sanction</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                    <label for="floatingInput">Firstname</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                    <label for="floatingInput">Middlename</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                    <label for="floatingInput">Lastname</label>
+                                </div>
+                                <div class="form-floating mb-3">
+    <script>
+        let department = [
+            {
+                value: "COED",
+                courses: ["BEED", "BSED", "BECED", "BPED"]
+            },
+            {
+                value: "CBA",
+                courses: ["BSIT", "BSBA FM", "BSA", "BSMA"]
+            },
+            {
+                value: "CAS",
+                courses: ["AB PHILO", "BS PSYCHOLOGY"]
+            },
+            {
+                value: "CCJ",
+                courses: ["BSCRIM"]
+            }
+        ];
+
+        function updateCourses() {
+            const departmentSelect = document.getElementById("departmentSelect");
+            const courseSelect = document.getElementById("courseSelect");
+            const selectedDepartment = departmentSelect.value;
+
+            // Clear previous options
+            courseSelect.innerHTML = '<option selected disabled>Course</option>';
+
+            // Find the selected department
+            const selectedDept = department.find(dept => dept.value === selectedDepartment);
+            if (selectedDept) {
+                selectedDept.courses.forEach(course => {
+                    const option = document.createElement("option");
+                    option.value = course;
+                    option.textContent = course;
+                    courseSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+
+    <select id="departmentSelect" class="form-select" aria-label="Department" onchange="updateCourses()">
+        <option selected disabled>Department</option>
+        <option value="COED">COED</option>
+        <option value="CBA">CBA</option>
+        <option value="CAS">CAS</option>
+        <option value="CCJ">CCJ</option>
+    </select>
+</div>
+<div class="form-floating mb-3">
+    <select id="courseSelect" class="form-select" aria-label="Course">
+        <option selected disabled>Course</option>
+        <!-- Course options will be populated based on the selected department -->
+    </select>
+</div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="e.g. 1A">
+                                    <label for="floatingInput">Year/Section</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                    <label for="floatingInput">No. of Absences</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                                    <label for="floatingPassword">Sanctions</label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-hover table-striped-columns">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">FIRSTNAME</th>
+                        <th scope="col">MIDDLENAME</th>
+                        <th scope="col">LASTNAME</th>
+                        <th scope="col">DEPARTMENT</th>
+                        <th scope="col">COURSE</th>
+                        <th scope="col">YEAR & SECTION</th>
+                        <th scope="col">NO. OF ABSENCES</th>
+                        <th scope="col">SANCTIONS</th>
+                        <th scope="col">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <?php
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<th scope='row'>" . $row["STUDENTID"] . "</th>";
+                            echo "<td>" . $row["FIRSTNAME"] . "</td>";
+                            echo "<td>" . $row["MIDDLENAME"] . "</td>";
+                            echo "<td>" . $row["LASTNAME"] . "</td>";
+                            echo "<td>" . $row["DEPARTMENT"] . "</td>";
+                            echo "<td>" . $row["COURSE"] . "</td>";
+                            echo "<td>" . $row["YEARSECTION"] . "</td>";
+                            echo "<td>" . $row["NO._OF_ABSENCES"] . "</td>";
+                            echo "<td>" . $row["SANCTIONS"] . "</td>";
+                            echo '<td>
+                           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
+                           <button type="button" class="btn btn-danger" data-bs-toggle="" data-bs-target="#exampleModal">Delete</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h1 class="modal-title fs-5 text-white fw-bold" id="exampleModalLabel">Add Student</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInputFirst" placeholder="John">
+                    <label for="floatingInputFirst">Firstname</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInputMiddle" placeholder="A.">
+                    <label for="floatingInputMiddle">Middlename</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInputLast" placeholder="Doe">
+                    <label for="floatingInputLast">Lastname</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+            </div>
         </div>
-        <!--end::Sidebar Brand-->
-        <!--begin::Sidebar Wrapper-->
-        <div class="sidebar-wrapper">
-            <nav class="mt-2">
-                <!--begin::Sidebar Menu-->
-                <ul
-                    class="nav sidebar-menu flex-column"
-                    data-lte-toggle="treeview"
-                    role="menu"
-                    data-accordion="false">
-                    <li class="nav-item">
-                        <a href="../../ssao-attendance/index.php" class="nav-link active">
-              <i class="bi bi-border-all"></i>
-                            <p>Dashboard</p>
-                        </a>
+    </div>
+</div>
+                            </td>';
+
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "No data found";
+                    }
+
+                    ?>
+
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="../../ssao-attendance/pages/Officers.php" class="nav-link">
-                            <i class="bi bi-person-fill"></i>
-                            <p>Officers</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../../ssao-attendance/pages/Students.php" class="nav-link">
-                            <i class="bi bi-people-fill"></i>
-                            <p>Students</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../pages/Events.php" class="nav-link">
-                        <i class="bi bi-calendar-event"></i>
-                            <p>Events</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../pages/Lists.php" class="nav-link">
-                        <i class="bi bi-card-checklist"></i>
-                            <p>Attendance List</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../pages/Reports.php" class="nav-link">
-                        <i class="bi bi-envelope-paper"></i>
-                            <p>Attendance Reports</p>   
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../../ssao-attendance/pages/Sanctions.php" class="nav-link">
-                        <i class="bi bi-bookmark-x"></i>
-                            <p>Sanctions</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="../pages/Logs.php" class="nav-link">
-                        <i class="bi bi-folder2-open"></i>
-                            <p>Activity Logs</p>   
-                        </a>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
                     </li>
                 </ul>
-                <!--end::Sidebar Menu-->
             </nav>
         </div>
-        <!--end::Sidebar Wrapper-->
-    </aside>
-    <!--end::Sidebar-->
 
+
+    </div>
+    <!--end::App Wrapper-->
     <!--begin::Script-->
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <script
@@ -390,6 +522,35 @@ https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js
 
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
 </body>
+<!--end::Body-->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            height: 600,
+            events: [{
+                    title: 'Team Meeting',
+                    start: '2025-04-25',
+                    color: '#007bff'
+                },
+                {
+                    title: 'Project Deadline',
+                    start: '2025-04-27',
+                    color: '#dc3545'
+                },
+                {
+                    title: 'Vacation',
+                    start: '2025-05-01',
+                    end: '2025-05-05',
+                    color: '#28a745'
+                }
+            ]
+        });
+        calendar.render();
+    });
+</script>
 
 </html>

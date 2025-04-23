@@ -1,3 +1,11 @@
+<?php
+include "../config/db.php";
+
+$sql = "SELECT * FROM officer LIMIT 10";
+$result = mysqli_query($conn, $sql);
+
+?>
+
 <!doctype html>
 <html lang="en">
 <!--begin::Head-->
@@ -68,58 +76,220 @@
         <!-- begin::Sidebar -->
         <?php include "../includes/Sidebar.php" ?>
         <!-- end::Sidebar -->
-        <div class="row">
-            <div class="col-4">
-            <button type="button" class="btn btn-primary">Primary</button>
+        <div class="container-fluid">
+            <div class="d-flex justify-content-start align-items-center mb-3 mt-2">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Add New Officer
+                </button>
+
+                <!-- Modal -->
+                <form action="" method="post">
+                    <?php
+                    include "../config/db.php";
+
+                    $stmt = $conn->prepare("INSERT INTO `officer` (FIRSTNAME, MIDDLENAME, LASTNAME, DEPARTMENT, COURSE, YEARSECTION, POSITION, USERNAME, PASSWORD) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    $stmt->bind_param(
+                        "sssssssss",
+                        $firstname,
+                        $middlename,
+                        $lastname,
+                        $selectedDepartment,
+                        $selectedCourse,
+                        $yearsection,
+                        $position,
+                        $username,
+                        $password
+                    );
+
+                    $departments = [
+                        "COED" => ["BEED", "BSED", "BECED", "BPED"],
+                        "CBA" => ["BSIT", "BSBA FM", "BSA", "BSMA"],
+                        "CAS" => ["AB PHILO", "BS PSYCHOLOGY"],
+                        "CCJ" => ["BSCRIM"]
+                    ];
+
+                    // Initialize variables
+                    $selectedDepartment = '';
+                    $selectedCourse = '';
+                    
+                    $firstname = $_POST['FIRSTNAME'];
+                    $middlename = $_POST['MIDDLENAME'];
+                    $lastname = $_POST['LASTNAME'];
+                    $selectedDepartment = $_POST['DEPARTMENT'];
+                    $selectedCourse = $_POST['COURSE'];
+                    $yearsection = $_POST['YEARSECTION'];
+                    $position = $_POST['POSITION'];
+                    $username = $_POST['USERNAME'];
+                    $password = $_POST['PASSWORD'];
+                    $stmt->execute();
+
+                    echo "New records created successfully";
+
+                    $stmt->close();
+                    $conn->close();
+                    ?>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary">
+                                    <h1 class="modal-title fs-5 text-white fw-bold" id="exampleModalLabel">Add Student</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-floating mb-3">
+                                        <input type="email" name="FIRSTNAME" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                        <label for="floatingInput">Firstname</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="email" name="MIDDLENAME" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                        <label for="floatingInput">Middlename</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="email" name="LASTNAME" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                        <label for="floatingInput">Lastname</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <select id="departmentSelect" name="DEPARTMENT" class="form-select" aria-label="Department" onchange="updateCourses()">
+                                            <option selected disabled>Department</option>
+                                            <?php foreach ($departments as $dept => $courses): ?>
+                                                <option value="<?php echo $dept; ?>" <?php echo ($selectedDepartment == $dept) ? 'selected' : ''; ?>><?php echo $dept; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <select id="courseSelect" name="COURSE" class="form-select" aria-label="Course" required>
+                                            <option selected disabled>Course</option>
+                                            <?php
+                                            // Populate course options based on the selected department
+                                            if ($selectedDepartment && isset($departments[$selectedDepartment])) {
+                                                foreach ($departments[$selectedDepartment] as $course) {
+                                                    echo '<option value="' . $course . '" ' . (($selectedCourse == $course) ? 'selected' : '') . '>' . $course . '</option>';
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="email" name="YEARSECTION" class="form-control" id="floatingInput" placeholder="e.g. 1A">
+                                        <label for="floatingInput">Year/Section</label>
+
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="email" name="POSITION" class="form-control" id="floatingInput" placeholder="e.g. 1A">
+                                        <label for="floatingInput">Position</label>
+
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="email" name="USERNAME" class="form-control" id="floatingInput" placeholder="name@example.com">
+                                        <label for="floatingInput">Username</label>
+                                    </div>
+                                    <div class="form-floating">
+                                        <input type="password" name="PASSWORD" class="form-control" id="floatingPassword" placeholder="Password">
+                                        <label for="floatingPassword">Password</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-        
+            <table class="table table-hover table-striped-columns">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">FIRSTNAME</th>
+                        <th scope="col">MIDDLENAME</th>
+                        <th scope="col">LASTNAME</th>
+                        <th scope="col">DEPARTMENT</th>
+                        <th scope="col">COURSE</th>
+                        <th scope="col">YEAR & SECTION</th>
+                        <th scope="col">POSITION</th>
+                        <th scope="col">USERNAME</th>
+                        <th scope="col">PASSWORD</th>
+                        <th scope="col">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <?php
+                    if (mysqli_num_rows($result) > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<th scope='row'>" . $row["STUDENTID"] . "</th>";
+                            echo "<td>" . $row["FIRSTNAME"] . "</td>";
+                            echo "<td>" . $row["MIDDLENAME"] . "</td>";
+                            echo "<td>" . $row["LASTNAME"] . "</td>";
+                            echo "<td>" . $row["DEPARTMENT"] . "</td>";
+                            echo "<td>" . $row["COURSE"] . "</td>";
+                            echo "<td>" . $row["YEARSECTION"] . "</td>";
+                            echo "<td>" . $row["POSITION"] . "</td>";
+                            echo "<td>" . $row["USERNAME"] . "</td>";
+                            echo "<td>" . $row["PASSWORD"] . "</td>";
+                            echo '<td>
+                           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
+                           <button type="button" class="btn btn-danger" data-bs-toggle="" data-bs-target="#exampleModal">Delete</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h1 class="modal-title fs-5 text-white fw-bold" id="exampleModalLabel">Add Student</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInputFirst" placeholder="John">
+                    <label for="floatingInputFirst">Firstname</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInputMiddle" placeholder="A.">
+                    <label for="floatingInputMiddle">Middlename</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInputLast" placeholder="Doe">
+                    <label for="floatingInputLast">Lastname</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+            </div>
         </div>
-        <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>John</td>
-      <td>Doe</td>
-      <td>@social</td>
-    </tr>
-  </tbody>
-</table>
-<button></button>
-       
-        <!--begin::Footer-->
-        <footer class="app-footer">
-            <!--begin::To the end-->
-            <div class="float-end d-none d-sm-inline">Anything you want</div>
-            <!--end::To the end-->
-            <!--begin::Copyright-->
-            <strong>
-                Copyright &copy; 2024-2025&nbsp;
-                <a href="https://adminlte.io" class="text-decoration-none">Fingerprint-Based Attendance MOnitoring System for SSAO</a>.
-            </strong>
-            All rights reserved.
-            <!--end::Copyright-->
-        </footer>
-        <!--end::Footer-->
+    </div>
+</div>
+                            </td>';
+
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "No data found";
+                    }
+
+                    ?>
+
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->

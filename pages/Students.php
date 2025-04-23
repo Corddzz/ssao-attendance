@@ -1,7 +1,7 @@
 <?php
 include "../config/db.php";
 
-$sql = "SELECT * FROM student LIMIT 5";
+$sql = "SELECT * FROM student LIMIT 10";
 $result = mysqli_query($conn, $sql);
 
 ?>
@@ -80,7 +80,7 @@ $result = mysqli_query($conn, $sql);
             <div class="d-flex justify-content-start align-items-center mb-3 mt-2">
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    New
+                    Add New Student
                 </button>
 
                 <!-- Modal -->
@@ -88,7 +88,7 @@ $result = mysqli_query($conn, $sql);
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header bg-primary">
-                                <h1 class="modal-title fs-5 text-white fw-bold" id="exampleModalLabel">New Student</h1>
+                                <h1 class="modal-title fs-5 text-white fw-bold" id="exampleModalLabel">Add Student</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -105,47 +105,61 @@ $result = mysqli_query($conn, $sql);
                                     <label for="floatingInput">Lastname</label>
                                 </div>
                                 <div class="form-floating mb-3">
+    <script>
+        let department = [
+            {
+                value: "COED",
+                courses: ["BEED", "BSED", "BECED", "BPED"]
+            },
+            {
+                value: "CBA",
+                courses: ["BSIT", "BSBA FM", "BSA", "BSMA"]
+            },
+            {
+                value: "CAS",
+                courses: ["AB PHILO", "BS PSYCHOLOGY"]
+            },
+            {
+                value: "CCJ",
+                courses: ["BSCRIM"]
+            }
+        ];
 
-                                    <script>
-                                        let department = [{
-                                                value: "COED",
-                                                courses: ["BEED", "BSED", "BECED", "BPED"]
-                                            },
-                                            {
-                                                value: "CBA",
-                                                courses: ["BSIT", "BSBA FM", "BSA", "BSMA"]
+        function updateCourses() {
+            const departmentSelect = document.getElementById("departmentSelect");
+            const courseSelect = document.getElementById("courseSelect");
+            const selectedDepartment = departmentSelect.value;
 
-                                            },
-                                            {
-                                                value: "CAS",
-                                                courses: ["AB PHILO", "BS PSYCHOLOGY", "BSA"]
-                                            },
-                                            {
-                                                value: "CCJ",
-                                                courses: ["BSCRIM"]
-                                            }
+            // Clear previous options
+            courseSelect.innerHTML = '<option selected disabled>Course</option>';
 
-                                        ];
-                                    </script>
+            // Find the selected department
+            const selectedDept = department.find(dept => dept.value === selectedDepartment);
+            if (selectedDept) {
+                selectedDept.courses.forEach(course => {
+                    const option = document.createElement("option");
+                    option.value = course;
+                    option.textContent = course;
+                    courseSelect.appendChild(option);
+                });
+            }
+        }
+    </script>
 
-
-                                    <select class="form-select" aria-label="Department">
-                                        <option selected disabled>Department</option>
-                                        <option value="COED">COED</option>
-                                        <option value="CBA">CBA</option>
-                                        <option value="CAS">CAS</option>
-                                        <option value="CCJ">CCJ</option>
-                                    </select>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <select class="form-select" aria-label="Department">
-                                        <option selected disabled>Course</option>
-                                        <option value="CBA">CBA</option>
-                                        <option value="COED">COED</option>
-                                        <option value="CAS">CAS</option>
-                                        <option value="CCJ">CCJ</option>
-                                    </select>
-                                </div>
+    <select id="departmentSelect" class="form-select" aria-label="Department" onchange="updateCourses()">
+        <option selected disabled>Department</option>
+        <option value="COED">COED</option>
+        <option value="CBA">CBA</option>
+        <option value="CAS">CAS</option>
+        <option value="CCJ">CCJ</option>
+    </select>
+</div>
+<div class="form-floating mb-3">
+    <select id="courseSelect" class="form-select" aria-label="Course">
+        <option selected disabled>Course</option>
+        <!-- Course options will be populated based on the selected department -->
+    </select>
+</div>
                                 <div class="form-floating mb-3">
                                     <input type="email" class="form-control" id="floatingInput" placeholder="e.g. 1A">
                                     <label for="floatingInput">Year/Section</label>
@@ -160,7 +174,7 @@ $result = mysqli_query($conn, $sql);
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
                                 <button type="button" class="btn btn-primary">Save</button>
                             </div>
                         </div>
@@ -198,8 +212,37 @@ $result = mysqli_query($conn, $sql);
                             echo "<td>" . $row["USERNAME"] . "</td>";
                             echo "<td>" . $row["PASSWORD"] . "</td>";
                             echo '<td>
-                            <button type="button" class="btn btn-info">Edit</button>
-                            <button type="button" class="btn btn-danger">Delete</button>
+                           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
+                           <button type="button" class="btn btn-danger" data-bs-toggle="" data-bs-target="#exampleModal">Delete</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h1 class="modal-title fs-5 text-white fw-bold" id="exampleModalLabel">Add Student</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInputFirst" placeholder="John">
+                    <label for="floatingInputFirst">Firstname</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInputMiddle" placeholder="A.">
+                    <label for="floatingInputMiddle">Middlename</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInputLast" placeholder="Doe">
+                    <label for="floatingInputLast">Lastname</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
                             </td>';
 
                             echo "</tr>";

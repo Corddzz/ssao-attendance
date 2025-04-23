@@ -6,7 +6,8 @@ $password = '';
 $dbname = 'dbattendance';
 
 
-$conn = mysqli_connect($localhost, $username, $password, $dbname);
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+$conn = new mysqli($localhost, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  } 
